@@ -1,6 +1,6 @@
-import Colors from "./../constant/Colors"
-import { Image, View, Text, StyleSheet,TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Colors from "./../constant/Colors";
 
 export default function Index() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Index() {
         <Text style={styles.paragraph}>Transform your ideas into engaging educational content,efficiently with AI!📚🤖</Text>
 
         <TouchableOpacity style={styles.button}>
-          <Text style={[styles.buttonText,{color:"orange"}]}  onPress={()=>router.push('/auth/SignUp')}>Get Started</Text>
+          <Text style={[styles.buttonText,{color:"orange"}]}  onPress={()=>router.push('/auth/signUp')}>Get Started</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <Text style={[styles.buttonText, { color: "grey" }]} onPress={()=>router.push('/auth/signIn')}>Already have an Account?</Text>
