@@ -1,7 +1,9 @@
 import Colors from "./../constant/Colors"
-import {Image, View,Text , StyleSheet} from "react-native";
+import { Image, View, Text, StyleSheet,TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function Index() {
+  const router = useRouter();
   return (
     <View
       style={styles.container}
@@ -11,16 +13,16 @@ export default function Index() {
 
       <View style={styles.description }>
         <Text style={styles.header}>
-          Welcome to Brainwaves
+          Welcome to Brainwave
         </Text>
         <Text style={styles.paragraph}>Transform your ideas into engaging educational content,efficiently with AI!📚🤖</Text>
 
-        <View style={styles.button}>
-          <Text style={[styles.buttonText,{color:"orange"}]}>Get Started</Text>
-        </View>
-        <View style={styles.button}>
-          <Text style={[styles.buttonText, { color: "grey" }]}>Already have an Account?</Text>
-        </View>
+        <TouchableOpacity style={styles.button}>
+          <Text style={[styles.buttonText,{color:"orange"}]}  onPress={()=>router.push('/auth/SignUp')}>Get Started</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={[styles.buttonText, { color: "grey" }]} onPress={()=>router.push('/auth/signIn')}>Already have an Account?</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
