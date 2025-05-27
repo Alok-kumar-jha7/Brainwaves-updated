@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'; // Ensure this is installed
 import Colors from "../../constant/Colors";
+import { useRouter } from "expo-router";
 
 export default function SignUp() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -54,8 +56,8 @@ export default function SignUp() {
 
       <View style={styles.textConatiner}>
         <Text style={styles.txt}>Already have an account?</Text>
-        <Pressable>
-          <Text style={styles.sigintxt}>Sign IN Here!</Text>
+        <Pressable onPress={() => router.push("/auth/signIn")}>
+          <Text style={styles.sigintxt}>Sign In Here!</Text>
         </Pressable>
       </View>
     </View>
