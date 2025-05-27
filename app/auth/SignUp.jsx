@@ -1,16 +1,20 @@
+import { useState } from "react";
 import {
-  View,
-  Text,
   Image,
+  Pressable,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  Pressable,
+  View,
 } from "react-native";
-import React from "react";
+import Feather from 'react-native-vector-icons/Feather'; // Ensure this is installed
 import Colors from "../../constant/Colors";
 
 export default function SignUp() {
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <View style={styles.container}>
       <Image
@@ -21,28 +25,43 @@ export default function SignUp() {
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.para}>Sign Up to get started! </Text>
 
-      <TextInput placeholder="Enter your FullName" style={styles.input} />
+      <TextInput placeholder="Enter your Name" style={styles.input} />
       <TextInput placeholder="Email" style={styles.input} />
-      <TextInput
-        placeholder="Password"
-        secureTextEntry={true}
-        style={styles.input}
-      />
+
+      
+      
+        <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder='Password'
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+          style={styles.passwordInput}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Feather
+            name={showPassword ? 'eye' : 'eye-off'}
+            size={22}
+            color='blue'
+          />
+        </TouchableOpacity>
+      </View>
+
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
+
       <View style={styles.textConatiner}>
-      <Text style={styles.txt}>
-        Already have an account?
-      </Text>
-      <Pressable>
+        <Text style={styles.txt}>Already have an account?</Text>
+        <Pressable>
           <Text style={styles.sigintxt}>Sign IN Here!</Text>
         </Pressable>
-        </View>
+      </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     display: "flex",
@@ -103,5 +122,21 @@ const styles = StyleSheet.create({
   },
   txt:{
     fontFamily: "outfit-bold",
-  }
+  },
+
+ passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginTop: 20,
+    width: '100%'
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 18,
+    paddingVertical: 15
+  },
+
 });
