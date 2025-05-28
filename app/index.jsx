@@ -18,7 +18,7 @@ export default function Index() {
         <Text style={styles.paragraph}>Transform your ideas into engaging educational content,efficiently with AI!📚🤖</Text>
 
         <TouchableOpacity style={styles.button}>
-          <Text style={[styles.buttonText,{color:"orange"}]}  onPress={()=>router.push('/auth/signUp')}>Get Started</Text>
+          <Text style={[styles.buttonText,{color:"orange"}]}  onPress={()=>router.push('/auth/SignUp')}>Get Started</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <Text style={[styles.buttonText, { color: "grey" }]} onPress={()=>router.push('/auth/signIn')}>Already have an Account?</Text>

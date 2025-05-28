@@ -3,12 +3,31 @@ import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from "../../constant/Colors";
-
+import { auth } from "../../config/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import Toast from 'react-native-toast-message';
 export default function SignIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);      
   const router = useRouter();
+  const [email, setEmail] = useState('');
 
+  const onSignInClick = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(resp => {
+        const user = resp.user;
+        console.log("User signed in successfully:", user);
+       
+      }).catch(e => {
+        console.error("Error signing in:", e);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: e.message,
+        });
+      })
+    
+  }
   return (
     <View style={styles.container}>
       <Image
@@ -20,16 +39,15 @@ export default function SignIn() {
       <Text style={styles.para}>Sign In to start learning. </Text>
 
      
-      <TextInput placeholder="Email" style={styles.input} />
-
-      
-      
+      <TextInput
+        placeholder="Email"
+        onChangeText={(value) => setEmail(value)}
+        style={styles.input} />
         <View style={styles.passwordContainer}>
         <TextInput
           placeholder='Password'
           secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={setPassword}
+          onChangeText={(value)=>setPassword(value)}
           style={styles.passwordInput}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
@@ -42,8 +60,8 @@ export default function SignIn() {
       </View>
 
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity onPress={onSignInClick} style={styles.button}>
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 
       <View style={styles.textConatiner}>
