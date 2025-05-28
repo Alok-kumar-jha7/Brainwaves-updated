@@ -1,31 +1,52 @@
 import { useRouter } from "expo-router";
-import { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState,useContext } from 'react';
+import { ActivityIndicator, Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from "../../constant/Colors";
-import { auth } from "../../config/firebaseConfig";
+import { auth,db } from "../../config/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Toast from 'react-native-toast-message';
+import { getDoc, doc } from "firebase/firestore";
+import { UserDetailContext } from "../../context/UserDetailsContext";
 export default function SignIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);      
   const router = useRouter();
   const [email, setEmail] = useState('');
-
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const [loading, setLoading] = useState(false);
   const onSignInClick = () => {
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then(resp => {
+      .then(async(resp) => {
         const user = resp.user;
         console.log("User signed in successfully:", user);
+        await getUserDetail();
+        setLoading(false);
+        router.replace('/(tabs)/home')
+
+       Toast.show({
+       type: 'success',
+       text1: 'Signed in to BrainWaves',
+       text2: 'Welcome back! 🎉',
+       visibilityTime: 5000,
+       position: 'top'
+   });
        
       }).catch(e => {
         console.error("Error signing in:", e);
+        setLoading(false);
         Toast.show({
           type: 'error',
           text1: 'Error',
           text2: e.message,
         });
       })
+    const getUserDetail = async() => {
+      const result = await getDoc(doc(db, 'users', email));
+      console.log("User details:", result.data());
+      setUserDetail(result.data());
+    }
     
   }
   return (
@@ -60,8 +81,9 @@ export default function SignIn() {
       </View>
 
 
-      <TouchableOpacity onPress={onSignInClick} style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
+      <TouchableOpacity onPress={onSignInClick} disabled={loading} style={styles.button}>
+        {!loading ? <Text style={styles.buttonText}>Sign In</Text> :
+          <ActivityIndicator size={25} color='black' />}
       </TouchableOpacity>
 
       <View style={styles.textConatiner}>

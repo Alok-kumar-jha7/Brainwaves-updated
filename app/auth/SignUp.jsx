@@ -7,52 +7,57 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
-import Feather from 'react-native-vector-icons/Feather'; 
+import Feather from "react-native-vector-icons/Feather";
 import Colors from "../../constant/Colors";
 import { useRouter } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth,db } from '../../config/firebaseConfig'; 
-import Toast from 'react-native-toast-message';
+import { auth, db } from "../../config/firebaseConfig";
+import Toast from "react-native-toast-message";
 import { doc, setDoc } from "firebase/firestore";
-import {UserDetailContext } from "./../../context/UserDetailsContext";
+import { UserDetailContext } from "./../../context/UserDetailsContext";
 export default function SignUp() {
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const router = useRouter();
-  const {userDetail, setUserDetail} = useContext(UserDetailContext);
-
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+   const [loading, setLoading] = useState(false);
   const CreateNewAccount = () => {
+    setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (resp) => {
         const user = resp.user;
         console.log("User created successfully:", user);
         await SaveUser(user);
+        setLoading(false);
         Toast.show({
-          type: 'success',
-          text1: 'Account created!',
-          text2: 'Welcome aboard 🎉',
+          type: "success",
+          text1: "Account created on BrainWaves",
+          text2: "You’re all set! 🚀",
+          visibilityTime: 6000,
+          position: "top",
         });
-   
       })
-     .catch(e => {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: e.message,
+      .catch((e) => {
+        setLoading(false);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: e.message,
+        });
       });
-    });
-  }
+  };
   const SaveUser = async (user) => {
-    const data= {
+    const data = {
       name: fullName,
-      email: email, 
+      email: email,
       member: false,
       uid: user?.uid,
-    }
-    await setDoc(doc(db, "users", email),data)
+    };
+    await setDoc(doc(db, "users", email), data);
     setUserDetail(data);
   };
 
@@ -66,14 +71,20 @@ export default function SignUp() {
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.para}>Sign Up to get started! </Text>
 
-      <TextInput placeholder="Enter your Name" onChangeText={(value)=>setFullName(value)} style={styles.input} />
-      <TextInput placeholder="Email" onChangeText={(value)=>setEmail(value)} style={styles.input} />
+      <TextInput
+        placeholder="Enter your Name"
+        onChangeText={(value) => setFullName(value)}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Email"
+        onChangeText={(value) => setEmail(value)}
+        style={styles.input}
+      />
 
-      
-      
-        <View style={styles.passwordContainer}>
+      <View style={styles.passwordContainer}>
         <TextInput
-          placeholder='Password'
+          placeholder="Password"
           secureTextEntry={!showPassword}
           value={password}
           onChangeText={(value) => setPassword(value)}
@@ -81,21 +92,21 @@ export default function SignUp() {
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Feather
-            name={showPassword ? 'eye' : 'eye-off'}
+            name={showPassword ? "eye" : "eye-off"}
             size={22}
-            color='blue'
+            color="blue"
           />
         </TouchableOpacity>
       </View>
 
-
       <TouchableOpacity onPress={CreateNewAccount} style={styles.button}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        {!loading ? <Text style={styles.buttonText}>Sign Up</Text> :
+         <ActivityIndicator size={25} color='black' />}
       </TouchableOpacity>
 
       <View style={styles.textConatiner}>
         <Text style={styles.txt}>Already have an account?</Text>
-        <Pressable onPress={()=>router.push('/auth/signIn')}>
+        <Pressable onPress={() => router.push("/auth/signIn")}>
           <Text style={styles.sigintxt}>Sign In Here!</Text>
         </Pressable>
       </View>
@@ -161,23 +172,22 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY,
     fontFamily: "outfit",
   },
-  txt:{
+  txt: {
     fontFamily: "outfit-bold",
   },
 
- passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginTop: 20,
-    width: '100%'
+    width: "100%",
   },
   passwordInput: {
     flex: 1,
     fontSize: 18,
-    paddingVertical: 15
+    paddingVertical: 15,
   },
-
 });
