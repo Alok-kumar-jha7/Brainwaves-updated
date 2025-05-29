@@ -1,110 +1,136 @@
 import { useRouter } from "expo-router";
-import { useState,useContext } from 'react';
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from "react-native";
+import { useState, useContext } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from "../../constant/Colors";
-import { auth,db } from "../../config/firebaseConfig";
+import { auth, db } from "../../config/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Toast from 'react-native-toast-message';
 import { getDoc, doc } from "firebase/firestore";
 import { UserDetailContext } from "../../context/UserDetailsContext";
+
 export default function SignIn() {
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);      
   const router = useRouter();
+  const { setUserDetail } = useContext(UserDetailContext);
+
   const [email, setEmail] = useState('');
-  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const onSignInClick = () => {
-    setLoading(true);
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async(resp) => {
-        const user = resp.user;
-        console.log("User signed in successfully:", user);
-        await getUserDetail();
-        setLoading(false);
-        router.replace('/(tabs)/home')
 
-       Toast.show({
-       type: 'success',
-       text1: 'Signed in to BrainWaves',
-       text2: 'Welcome back! 🎉',
-       visibilityTime: 5000,
-       position: 'top'
-   });
-       
-      }).catch(e => {
-        console.error("Error signing in:", e);
-        setLoading(false);
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: e.message,
-        });
-      })
-    const getUserDetail = async() => {
-      const result = await getDoc(doc(db, 'users', email));
-      console.log("User details:", result.data());
+  const getUserDetail = async (userEmail) => {
+    try {
+      const result = await getDoc(doc(db, 'users', userEmail));
       setUserDetail(result.data());
+    } catch (err) {
+      console.error("Error fetching user detail:", err);
     }
-    
-  }
+  };
+
+  const onSignInClick = async () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      await getUserDetail(email);
+      Toast.show({
+        type: 'success',
+        text1: 'Signed in to BrainWaves',
+        text2: 'Welcome back! 🎉',
+        visibilityTime: 5000,
+        position: 'top',
+      });
+      router.replace('/(tabs)/home');
+    } catch (e) {
+      console.error("Error signing in:", e);
+      Toast.show({
+        type: 'error',
+        text1: 'Sign In Failed',
+        text2: e.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../../assets/images/log.png")}
-        style={styles.image}
-      />
-
-      <Text style={styles.header}>Welcome Back</Text>
-      <Text style={styles.para}>Sign In to start learning. </Text>
-
-     
-      <TextInput
-        placeholder="Email"
-        onChangeText={(value) => setEmail(value)}
-        style={styles.input} />
-        <View style={styles.passwordContainer}>
-        <TextInput
-          placeholder='Password'
-          secureTextEntry={!showPassword}
-          onChangeText={(value)=>setPassword(value)}
-          style={styles.passwordInput}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/images/log.png")}
+          style={styles.image}
         />
-        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Feather
-            name={showPassword ? 'eye' : 'eye-off'}
-            size={22}
-            color='blue'
+
+        <Text style={styles.header}>Welcome Back</Text>
+        <Text style={styles.para}>Sign In to start learning. </Text>
+
+        <TextInput
+          placeholder="Email"
+          onChangeText={setEmail}
+          value={email}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
+
+        <View style={styles.passwordContainer}>
+          <TextInput
+            placeholder="Password"
+            secureTextEntry={!showPassword}
+            onChangeText={setPassword}
+            value={password}
+            style={styles.passwordInput}
           />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Feather
+              name={showPassword ? 'eye' : 'eye-off'}
+              size={22}
+              color="blue"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          onPress={onSignInClick}
+          disabled={loading}
+          style={[styles.button, loading && { opacity: 0.7 }]}
+        >
+          {!loading ? (
+            <Text style={styles.buttonText}>Sign In</Text>
+          ) : (
+            <ActivityIndicator size="small" color="#fff" />
+          )}
         </TouchableOpacity>
+
+        <View style={styles.textContainer}>
+          <Text style={styles.txt}>New Here?</Text>
+          <Pressable onPress={() => router.push('/auth/signUp')}>
+            <Text style={styles.sigintxt}>Create an Account!</Text>
+          </Pressable>
+        </View>
       </View>
-
-
-      <TouchableOpacity onPress={onSignInClick} disabled={loading} style={styles.button}>
-        {!loading ? <Text style={styles.buttonText}>Sign In</Text> :
-          <ActivityIndicator size={25} color='black' />}
-      </TouchableOpacity>
-
-      <View style={styles.textConatiner}>
-        <Text style={styles.txt}>New Here?</Text>
-        <Pressable onPress={()=>router.push('/auth/signUp')}>
-          <Text style={styles.sigintxt}>Create an Account!</Text>
-        </Pressable>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    flex: 1,
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     padding: 25,
-
     paddingTop: 50,
-    backgroundColor: Colors.WHITE,
-    flex: 1,
   },
   image: {
     width: 320,
@@ -138,40 +164,38 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginTop: 25,
+    alignItems: "center",
   },
   buttonText: {
     color: Colors.WHITE,
-    textAlign: "center",
     fontSize: 20,
     fontFamily: "outfit",
   },
-  textConatiner: {
-    display: "flex",
+  textContainer: {
     flexDirection: "row",
-    gap: 5,
     marginTop: 15,
+    alignItems: "center",
   },
   sigintxt: {
     color: Colors.PRIMARY,
     fontFamily: "outfit",
+    marginLeft: 5,
   },
-  txt:{
+  txt: {
     fontFamily: "outfit-bold",
   },
-
- passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginTop: 20,
-    width: '100%'
+    width: '100%',
   },
   passwordInput: {
     flex: 1,
     fontSize: 18,
-    paddingVertical: 15
+    paddingVertical: 15,
   },
-
 });

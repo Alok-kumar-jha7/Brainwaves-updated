@@ -8,6 +8,9 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Keyboard,
+  TouchableWithoutFeedback,
+
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import Colors from "../../constant/Colors";
@@ -26,6 +29,7 @@ export default function SignUp() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
    const [loading, setLoading] = useState(false);
   const CreateNewAccount = () => {
+    Keyboard.dismiss();
     setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (resp) => {
@@ -62,6 +66,7 @@ export default function SignUp() {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <Image
         source={require("../../assets/images/signup.png")}
@@ -110,7 +115,8 @@ export default function SignUp() {
           <Text style={styles.sigintxt}>Sign In Here!</Text>
         </Pressable>
       </View>
-    </View>
+      </View>
+      </TouchableWithoutFeedback>
   );
 }
 
