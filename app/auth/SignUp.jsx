@@ -38,7 +38,7 @@ export default function SignUp() {
         await SaveUser(user);
         setLoading(false);
         Toast.show({
-          type: "success",
+          type: 'success',
           text1: "Account created on BrainWaves",
           text2: "You’re all set! 🚀",
           visibilityTime: 6000,
@@ -48,9 +48,12 @@ export default function SignUp() {
       .catch((e) => {
         setLoading(false);
         Toast.show({
-          type: "error",
+          type: 'error',
           text1: "Error",
           text2: e.message,
+          visibilityTime: 6000,
+           position: "top",
+
         });
       });
   };

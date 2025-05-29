@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 // import { Toast } from "react-native-toast-message/lib/src/Toast";
-import { UserDetailContext } from "./../context/UserDetailsContext";
+import { UserDetailContext } from "../context/UserDetailsContext";
 import { useState } from "react";
 
 export default function RootLayout() {

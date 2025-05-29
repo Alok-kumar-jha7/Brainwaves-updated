@@ -58,6 +58,8 @@ export default function SignIn() {
         type: 'error',
         text1: 'Sign In Failed',
         text2: e.message,
+        visibilityTime: 7000,
+        position: 'top',
       });
     } finally {
       setLoading(false);
