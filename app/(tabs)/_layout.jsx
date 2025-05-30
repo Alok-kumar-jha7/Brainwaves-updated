@@ -14,7 +14,7 @@ export default function TabLayout() {
         name="home"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
           tabBarLabel: "Home",
         }}
@@ -33,7 +33,7 @@ export default function TabLayout() {
         name="progress"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cellular-outline" size={size} color={color} />
+            <Ionicons name="cellular" size={size} color={color} />
           ),
           tabBarLabel: "Progress",
         }}
@@ -42,7 +42,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-circle-outline" size={size} color={color} />
+            <Ionicons name="person-circle" size={size} color={color} />
           ),
           tabBarLabel: "Profile",
         }}
