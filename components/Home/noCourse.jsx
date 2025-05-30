@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
-import Button from '../shared/Button';
+import Button from '../../components/Shared/Button';
+
 
 export default function NoCourse() {
   return (
     <View style={styles.container}>
           <Image source={require('../../assets/images/books.png')} style={styles.image} />
           <Text style={styles.imgHeader}>You Don't Have Any Courses</Text>
-      <Button text={ 'Create new course'} />
+       <Button text={ 'Create new Course'} />
     </View>
   )
 }

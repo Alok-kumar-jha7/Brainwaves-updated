@@ -19,7 +19,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig";
 import Toast from "react-native-toast-message";
 import { doc, setDoc } from "firebase/firestore";
-import { UserDetailContext } from "./../../context/UserDetailsContext";
+import { UserDetailContext } from "../../context/UserDetailsContext";
 export default function SignUp() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

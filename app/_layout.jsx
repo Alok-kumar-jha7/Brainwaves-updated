@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-// import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { UserDetailContext } from "../context/UserDetailsContext";
 import { useState } from "react";
 
@@ -14,14 +14,14 @@ export default function RootLayout() {
 
   return (
     <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
-      <>
+      
         <Stack screenOptions={{ headerShown: false }} />
-        {/* <Toast />  */}
+        <Toast /> 
         
         
        
 
-      </>
-    </UserDetailContext.Provider>
+      
+     </UserDetailContext.Provider>
   );
 }

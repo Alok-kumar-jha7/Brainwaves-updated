@@ -29,31 +29,35 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const getUserDetail = async (userEmail) => {
-    try {
-      const result = await getDoc(doc(db, 'users', userEmail));
+  const getUserDetail = async () => {
+      const result = await getDoc(doc(db, 'users', email));
       setUserDetail(result.data());
-    } catch (err) {
-      console.error("Error fetching user detail:", err);
-    }
+      console.error("Error fetching user detail:", result.data());
+    
   };
 
   const onSignInClick = async () => {
     Keyboard.dismiss();
     setLoading(true);
-    try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      await getUserDetail(email);
+    
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (resp) => {
+        const user = resp.user
+        console.log("User signed in successfully:", user);
+        await getUserDetail();
+        setLoading(false);
+        router.replace('/(tabs)/home');
+      })
       Toast.show({
         type: 'success',
         text1: 'Signed in to BrainWaves',
         text2: 'Welcome back! 🎉',
         visibilityTime: 5000,
         position: 'top',
-      });
-      router.replace('/(tabs)/home');
-    } catch (e) {
+      })
+     .catch (e=>{
       console.error("Error signing in:", e);
+      setLoading(false);
       Toast.show({
         type: 'error',
         text1: 'Sign In Failed',
@@ -61,9 +65,9 @@ export default function SignIn() {
         visibilityTime: 7000,
         position: 'top',
       });
-    } finally {
-      setLoading(false);
-    }
+    } )
+      
+    
   };
 
   return (
