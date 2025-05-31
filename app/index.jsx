@@ -6,33 +6,45 @@ import { auth, db } from "../config/firebaseConfig";
 import { getDoc, doc } from "firebase/firestore";
 import { UserDetailContext } from "./../context/UserDetailsContext";
 import { useContext } from "react";
+import Toast from "react-native-toast-message";
 
 export default function Index() {
   const router = useRouter();
   const { setUserDetail } = useContext(UserDetailContext);
-  onAuthStateChanged(auth, async(user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      console.log("User is signed in:",user);
-      const result = await getDoc(doc(db, 'users', user?.email));
+      console.log("User is signed in:", user);
+      const result = await getDoc(doc(db, "users", user?.email));
+      Toast.show({
+        type: "info",
+        text1: "You have already signed in 👋",
+        text2: "Welcome back! 🎉",
+        visibilityTime: 3000,
+        position: "top",
+      });
       setUserDetail(result.data());
-      router.replace('/(tabs)/home');
-     }
-    })
+      router.replace("/(tabs)/home");
+    }
+  });
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/images/landingimg.png')} style={styles.landingImage} />
+      <Image
+        source={require("../assets/images/landingimg.png")}
+        style={styles.landingImage}
+      />
 
       <View style={styles.description}>
         <Text style={styles.header}>Welcome to Brainwave</Text>
         <Text style={styles.paragraph}>
-          Transform your ideas into engaging educational content, efficiently with AI!📚🤖
+          Transform your ideas into engaging educational content, efficiently
+          with AI!📚🤖
         </Text>
 
         <TouchableOpacity style={styles.button}>
           <Text
             style={[styles.buttonText, { color: "orange" }]}
-            onPress={() => router.push('/auth/SignUp')}
+            onPress={() => router.push("/auth/SignUp")}
           >
             Get Started
           </Text>
@@ -40,7 +52,7 @@ export default function Index() {
         <TouchableOpacity style={styles.button}>
           <Text
             style={[styles.buttonText, { color: "grey" }]}
-            onPress={() => router.push('/auth/signIn')}
+            onPress={() => router.push("/auth/signIn")}
           >
             Already have an Account?
           </Text>
@@ -56,10 +68,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   landingImage: {
-    width: '100%',
+    width: "100%",
     height: 300,
     marginTop: 70,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   description: {
     marginTop: 20,
@@ -72,15 +84,15 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     color: Colors.WHITE,
-    textAlign: 'center',
-    fontFamily: 'outfit-bold',
+    textAlign: "center",
+    fontFamily: "outfit-bold",
   },
   paragraph: {
     fontSize: 20,
     color: Colors.WHITE,
     marginTop: 20,
-    textAlign: 'center',
-    fontFamily: 'outfit',
+    textAlign: "center",
+    fontFamily: "outfit",
   },
   button: {
     backgroundColor: Colors.WHITE,
@@ -90,7 +102,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    textAlign: 'center',
-    fontFamily: 'outfit',
+    textAlign: "center",
+    fontFamily: "outfit",
   },
 });

@@ -1,8 +1,21 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image} from "react-native";
 import React from "react";
 import Button from "../../components/Shared/Button";
+import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
 
 export default function NoCourse() {
+  const router = useRouter();
+   const handleCreateCourse = () => {
+       Toast.show({
+        type: 'Waiting',
+        text1: 'Please wait...⏳',
+        text2: 'We’re processing your request...',
+        visibilityTime: 3000,
+        position: 'top',
+      })
+    router.push("/addCourse");
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -10,9 +23,9 @@ export default function NoCourse() {
         style={styles.image}
       />
       <Text style={styles.imgHeader}>You Don't Have Any Courses</Text>
-      <Button text={"Create New Course"} />
+      <Button text={"Create New Course"} onPress={handleCreateCourse}/>
       <Button text={"Explore Existing Courses"}
-      type='outline'/>
+      type='outline' onClick/>
     </View>
   );
 }

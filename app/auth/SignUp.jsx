@@ -27,9 +27,19 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const router = useRouter();
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const CreateNewAccount = () => {
     Keyboard.dismiss();
+    if (!fullName || !email || !password) {
+      Toast.show({
+        type: 'warning',
+        text1: 'Missing Fields🙁',
+        text2: 'Please fill out all fields before signing up.',
+        visibilityTime: 4000,
+        position: 'top',
+      });
+      return;
+    }
     setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (resp) => {
@@ -43,6 +53,7 @@ export default function SignUp() {
           text2: "You’re all set! 🚀",
           visibilityTime: 6000,
           position: "top",
+          
         });
       })
       .catch((e) => {
@@ -102,7 +113,7 @@ export default function SignUp() {
           <Feather
             name={showPassword ? "eye" : "eye-off"}
             size={22}
-            color="blue"
+            color="grey"
           />
         </TouchableOpacity>
       </View>

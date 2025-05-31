@@ -38,6 +38,16 @@ export default function SignIn() {
 
   const onSignInClick = async () => {
     Keyboard.dismiss();
+    if ( !email || !password) {
+    Toast.show({
+      type: 'warning',
+      text1: 'Missing Fields🙁',
+      text2: 'Please fill out all fields before Signing In.',
+      visibilityTime: 4000,
+      position: 'top',
+    });
+    return;
+  }
     setLoading(true);
     
     signInWithEmailAndPassword(auth, email, password)
@@ -102,7 +112,7 @@ export default function SignIn() {
             <Feather
               name={showPassword ? 'eye' : 'eye-off'}
               size={22}
-              color="blue"
+              color="grey"
             />
           </TouchableOpacity>
         </View>

@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.header}>Hello ,{userDetail?.name}</Text>
+        <Text style={styles.header}>Hello,{userDetail?.name}</Text>
         <Text style={styles.headertxt}>Let's Get Started</Text>
           </View>
           <TouchableOpacity>
