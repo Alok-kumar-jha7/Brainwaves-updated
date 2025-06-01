@@ -5,7 +5,7 @@ import Button from '../../components/Shared/Button'
 
 
 export default function AddCourse() {
-    
+    const [loading, setLoading] = useState(false);
     const onGenrateTopic = () => {
         console.log("Generate Topic button pressed");
         
@@ -19,7 +19,7 @@ export default function AddCourse() {
               numberOfLines={3}
               multiline={true} />
           <Button text={'Generate Topic'}
-              type='outline' onPress={() => onGenrateTopic()} />
+              type='outline' onPress={() => onGenrateTopic()} loading={loading} />
           
     </View>
   )

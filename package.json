@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@google/genai": "^1.0.0",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-community/cli": "^18.0.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
@@ -31,9 +32,11 @@
     "expo-system-ui": "~5.0.7",
     "expo-web-browser": "~14.1.6",
     "firebase": "^11.8.1",
+    "mime": "^4.0.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~3.17.4",
@@ -47,6 +50,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-typescript": "^7.27.1",
+    "@types/node": "^22.15.29",
     "@types/react": "~19.0.10",
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^9.27.0",
@@ -56,5 +60,9 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.33.0"
   },
-  "private": true
+  "private": true,
+  "description": "This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

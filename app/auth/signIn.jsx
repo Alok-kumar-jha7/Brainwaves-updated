@@ -131,7 +131,7 @@ export default function SignIn() {
 
         <View style={styles.textContainer}>
           <Text style={styles.txt}>New Here?</Text>
-          <Pressable onPress={() => router.push('/auth/signUp')}>
+          <Pressable onPress={() => router.push('/auth/SignUp')}>
             <Text style={styles.sigintxt}>Create an Account!</Text>
           </Pressable>
         </View>
