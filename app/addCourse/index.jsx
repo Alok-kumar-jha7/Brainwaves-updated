@@ -2,9 +2,9 @@ import { View, Text, StyleSheet, TextInput} from 'react-native'
 import React,{ useState } from 'react'
 import Colors from '../../constant/Colors'
 import Button from '../../components/Shared/Button'
-import { generateTopicsAiModel } from '../../config/geminiAiConfig';
-// import Toast from 'react-native-toast-message';
+import { rest } from '../../config/geminiAiConfig';
 import Prompt from '../../constant/Prompt';
+
 
 
 export default function AddCourse() {
@@ -12,13 +12,14 @@ export default function AddCourse() {
     const [userInput, setUserInput] = useState();
     const onGenrateTopic = async () => {
         setLoading(true);
-        const PROMPT = userInput + Prompt.IDEA;
-        const aiReaponse = await generateTopicsAiModel.sendMessage(PROMPT);
-        const response = aiReaponse.response.text();
+        const PROMPT = userInput+Prompt.IDEA;
+        const aiResponse = await rest.sendMessage(PROMPT);
+        const topicIdea =JSON.parse(aiResponse.text)6+
+        console.log('Generated Topic:', topicIdea);
         setLoading(false);
         
         
-    }
+    };
   return (
     <View style={styles.constainer}>
           <Text style={styles.header}>Create New Course</Text>
@@ -30,11 +31,11 @@ export default function AddCourse() {
               onChangeText={(value)=>setUserInput(value)}
           />
           <Button text={'Generate Topic'}
-              type='outline' onPress={() => onGenrateTopic()} loading={loading} />
+              type='outline' onPress={(value) => onGenrateTopic(value)} loading={loading} />
           
     </View>
   )
-}
+};
 const styles = StyleSheet.create({
     header: {
         fontSize: 24,
