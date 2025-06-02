@@ -6,21 +6,36 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Shared/Button";
-import { generateTopics } from "../../config/geminiAiConfig";
+import { generateCourse, generateTopics } from "../../config/geminiAiConfig";
 import Prompt from "../../constant/Prompt";
+import Toast from "react-native-toast-message";
+import { db } from "../../config/firebaseConfig";
+import { setDoc, doc } from "firebase/firestore";
+import { UserDetailContext } from "../../context/UserDetailsContext";
+
+
 
 export default function AddCourse() {
   const [loading, setLoading] = useState(false);
+  const[userDetail, setUserDetail] = useContext(UserDetailContext);
   const [userInput, setUserInput] = useState("");
   const [generatedTopics, setGeneratedTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const router = useRouter();
 
   const onGenerateTopic = async () => {
     setLoading(true);
-    const PROMPT = `Learn ${userInput}.
+     Toast.show({
+            type: 'Waiting',
+            text1: 'Please wait...⏳',
+            text2: 'We’re processing your request...',
+            visibilityTime: 3000,
+            position: 'top',
+          })
+    const PROMPT = `Learn ${userInput}+
             ${Prompt.IDEA}`;
     const aiResponse = await generateTopics(PROMPT);
     const topicIdea = JSON.parse(aiResponse.text);
@@ -39,6 +54,45 @@ export default function AddCourse() {
   const isTopicSelected = (topic) => {
     const selction = selectedTopics.find((item) => item == topic);
     return selction ? true : false;
+  };
+  const onGenerateCourse = async () => {
+    loading(true);
+    Toast.show({
+            type: 'Waiting',
+            text1: 'Please wait...⏳',
+            text2: 'We’re processing your request...',
+            visibilityTime: 3000,
+            position: 'top',
+          })
+    const PROMPT = `${selectedTopics} + ${Prompt.COURSE}`;
+
+    const aiResponse = await generateCourse(PROMPT);
+    const courses = JSON.parse(aiResponse.text);
+
+    
+    Toast.show({
+      type: 'success',
+      text1: 'Course Generated Successfully! 🎉',
+      text2: `Course Name: ${course.name}\nDescription: ${course.description}`,
+      visibilityTime: 5000,
+      position: 'top',
+    });
+    console.log("Generated Course: ", [courses]);
+    // Saving the generated courses to Firestore database
+      courses?.forEach(async (course) => {
+        await setDoc(doc(db, 'Courses', Date.now().toString()), {
+          ...course,
+          createdAt: new Date().toISOString(),
+          createdBy: userDetail?.name,
+          createdByEmail: userDetail?.email,
+
+      
+        })
+        router.push("/(tabs)/home");
+      }
+      );
+    setLoading(false);
+
   };
 
   return (
@@ -61,14 +115,16 @@ export default function AddCourse() {
       <Button
         text="Generate Topics"
         onPress={() => onGenerateTopic()}
+        type="outline"
         loading={loading}
+        style={{marginTop:5}}
       />
 
       <View style={styles.topicsContainer}>
         <Text style={styles.topicsHeader}>
           Select the topics that you want to add on this course
         </Text>
-        <ScrollView maxHeight={250}>
+        <ScrollView maxHeight={190}>
         <View style={styles.pressview} >
           {generatedTopics.map((item, index) => (
             <Pressable key={index} onPress={() => onSelectTopic(item)}>
@@ -88,6 +144,7 @@ export default function AddCourse() {
           </View>
           </ScrollView>
       </View>
+      {selectedTopics?.length > 0 && <Button text='Genrate Course' onPress={() => onGenerateCourse()} loading={loading} />}
     </View>
   );
 }
@@ -124,7 +181,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 100,
     marginTop: 15,
-    marginBottom: 20,
     textAlignVertical: "top",
     fontSize: 16,
     fontFamily: "outfit",

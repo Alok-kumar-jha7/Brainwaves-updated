@@ -7,13 +7,7 @@ import { useRouter } from "expo-router";
 export default function NoCourse() {
   const router = useRouter();
    const handleCreateCourse = () => {
-       Toast.show({
-        type: 'Waiting',
-        text1: 'Please wait...⏳',
-        text2: 'We’re processing your request...',
-        visibilityTime: 3000,
-        position: 'top',
-      })
+      
     router.push("/addCourse");
   };
   return (
