@@ -6,18 +6,21 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Shared/Button";
 import { generateTopics, generateCourses } from "../../config/geminiAiConfig";
 import Prompt from "../../constant/Prompt";
 import Toast from "react-native-toast-message";
+import { setDoc, doc } from "firebase/firestore";
+import { UserDetailContext } from "../../context/UserDetailsContext";
+import { db } from "../../config/firebaseConfig";
 import { useRouter } from "expo-router";
-
 export default function AddCourse() {
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [generatedTopics, setGeneratedTopics] = useState([]);
+  const { userDetail } = useContext(UserDetailContext);
   const [selectedTopics, setSelectedTopics] = useState([]);
   const router = useRouter();
 
@@ -52,43 +55,54 @@ export default function AddCourse() {
     return selction ? true : false;
   };
   const onGenerateCourse = async () => {
-       setLoading(true);
+  try {
+    setLoading(true);
     Toast.show({
-            type: 'Waiting',
-            text1: 'Please wait...⏳',
-            text2: 'We’re processing your request...',
-            visibilityTime: 3000,
-            position: 'top',
-          })
+      type: 'Waiting',
+      text1: 'Please wait...⏳',
+      text2: 'We’re processing your request...',
+      visibilityTime: 3000,
+      position: 'top',
+    });
+
     const PROMPT = `${selectedTopics} + ${Prompt.COURSE}`;
-
     const aiResponse = await generateCourses(PROMPT);
-    const courses = JSON.parse(aiResponse.text);
+    const courses = JSON.parse( aiResponse.text);
 
-    
     Toast.show({
       type: 'success',
       text1: 'Course Generated Successfully! 🎉',
-      text2: `Course Name: ${course.name}\nDescription: ${course.description}`,
+      text2: `Course Name: ${courses[0]?.name}\nDescription: ${courses[0]?.description}`,
       visibilityTime: 5000,
       position: 'top',
     });
-    console.log("Generated Course: ", courses);
-    // Saving the generated courses to Firestore database
-      courses?.forEach(async (course) => {
-        await setDoc(doc(db, 'Courses', Date.now().toString()), {
-          ...course,
-          createdAt: new Date().toISOString(),
-          createdBy: userDetail?.name,
-          createdByEmail: userDetail?.email,
 
-      
-        })
-        router.push("/(tabs)/home");
-      }
-      );
+    console.log('Generated Course:', courses);
+
+
+      await setDoc(doc(db, 'Courses', Date.now().toString()), {
+        ...courses,
+        createdAt: new Date().toISOString(),
+        createdBy: userDetail?.name,
+        createdByEmail: userDetail?.email,
+      });
+    
+
+    router.push('/(tabs)/home');
+  } catch (error) {
+    console.error('Error generating course:', error);
+    Toast.show({
+      type: 'error',
+      text1: 'Something went wrong! ❌',
+      text2: error.message || 'Please try again later.',
+      visibilityTime: 5000,
+      position: 'top',
+    });
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
 
   return (
     <View style={styles.container}>
