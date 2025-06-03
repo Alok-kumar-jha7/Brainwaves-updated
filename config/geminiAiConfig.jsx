@@ -1,4 +1,3 @@
-// config/geminiAiConfig.js
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.EXPO_PUBLIC_GEMINI_API_KEY);
@@ -18,7 +17,7 @@ export const generateTopics = async (prompt) => {
     });
 
 const result = await model.generateContent(prompt);
-    
+
     const response = await result.response;
     return {
       text: response.text({ format: 'text' }),
@@ -28,7 +27,7 @@ const result = await model.generateContent(prompt);
     throw error;
   }
 };
-export const generateCourse = async (prompt) => {
+export const generateCourses = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash",
@@ -43,13 +42,13 @@ export const generateCourse = async (prompt) => {
     });
 
 const result = await model.generateContent(prompt);
-    
+
     const response = await result.response;
     return {
       text: response.text({ format: 'text' }),
     };
   } catch (error) {
-    console.error('Error generating topics:', error);
+    console.error('Error generating Courses:', error);
     throw error;
   }
 };

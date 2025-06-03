@@ -3,24 +3,19 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Pressable,
   ScrollView,
+  Pressable,
 } from "react-native";
-import React, { useState,useContext } from "react";
+import React, { useState } from "react";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Shared/Button";
-import { generateCourse, generateTopics } from "../../config/geminiAiConfig";
+import { generateTopics, generateCourses } from "../../config/geminiAiConfig";
 import Prompt from "../../constant/Prompt";
 import Toast from "react-native-toast-message";
-import { db } from "../../config/firebaseConfig";
-import { setDoc, doc } from "firebase/firestore";
-import { UserDetailContext } from "../../context/UserDetailsContext";
-
-
+import { useRouter } from "expo-router";
 
 export default function AddCourse() {
   const [loading, setLoading] = useState(false);
-  const[userDetail, setUserDetail] = useContext(UserDetailContext);
   const [userInput, setUserInput] = useState("");
   const [generatedTopics, setGeneratedTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
@@ -28,17 +23,18 @@ export default function AddCourse() {
 
   const onGenerateTopic = async () => {
     setLoading(true);
-     Toast.show({
-            type: 'Waiting',
-            text1: 'Please wait...⏳',
-            text2: 'We’re processing your request...',
-            visibilityTime: 3000,
-            position: 'top',
-          })
-    const PROMPT = `Learn ${userInput}+
+    Toast.show({
+      type: "Waiting",
+      text1: "Please wait...⏳",
+      text2: "We’re processing your request...",
+      visibilityTime: 3000,
+      position: "top",
+    });
+    const PROMPT = `Learn ${userInput}:
             ${Prompt.IDEA}`;
     const aiResponse = await generateTopics(PROMPT);
     const topicIdea = JSON.parse(aiResponse.text);
+    console.log("Parsed Topic Idea:", topicIdea);
     setGeneratedTopics(topicIdea);
     setLoading(false);
   };
@@ -56,7 +52,7 @@ export default function AddCourse() {
     return selction ? true : false;
   };
   const onGenerateCourse = async () => {
-    loading(true);
+       setLoading(true);
     Toast.show({
             type: 'Waiting',
             text1: 'Please wait...⏳',
@@ -66,7 +62,7 @@ export default function AddCourse() {
           })
     const PROMPT = `${selectedTopics} + ${Prompt.COURSE}`;
 
-    const aiResponse = await generateCourse(PROMPT);
+    const aiResponse = await generateCourses(PROMPT);
     const courses = JSON.parse(aiResponse.text);
 
     
@@ -92,7 +88,6 @@ export default function AddCourse() {
       }
       );
     setLoading(false);
-
   };
 
   return (
@@ -115,9 +110,8 @@ export default function AddCourse() {
       <Button
         text="Generate Topics"
         onPress={() => onGenerateTopic()}
-        type="outline"
         loading={loading}
-        style={{marginTop:5}}
+        type="outline"
       />
 
       <View style={styles.topicsContainer}>
@@ -125,26 +119,36 @@ export default function AddCourse() {
           Select the topics that you want to add on this course
         </Text>
         <ScrollView maxHeight={190}>
-        <View style={styles.pressview} >
-          {generatedTopics.map((item, index) => (
-            <Pressable key={index} onPress={() => onSelectTopic(item)}>
-              <Text
-                style={{
-                  padding: 10,
-                  borderWidth: 0.45,
-                  borderRadius: 15,
-                  backgroundColor: isTopicSelected(item) ? Colors.PRIMARY : null,
-                  color: isTopicSelected(item) ? Colors.WHITE : Colors.PRIMARY,
-                }}
-              >
-                {item}
-              </Text>
-            </Pressable>
-          ))}
+          <View style={styles.pressview}>
+            {generatedTopics.map((item, index) => (
+              <Pressable key={index} onPress={() => onSelectTopic(item)}>
+                <Text
+                  style={{
+                    padding: 10,
+                    borderWidth: 0.45,
+                    borderRadius: 15,
+                    backgroundColor: isTopicSelected(item)
+                      ? Colors.PRIMARY
+                      : null,
+                    color: isTopicSelected(item)
+                      ? Colors.WHITE
+                      : Colors.PRIMARY,
+                  }}
+                >
+                  {item}
+                </Text>
+              </Pressable>
+            ))}
           </View>
-          </ScrollView>
+        </ScrollView>
       </View>
-      {selectedTopics?.length > 0 && <Button text='Genrate Course' onPress={() => onGenerateCourse()} loading={loading} />}
+      {selectedTopics?.length > 0 && (
+        <Button
+          text="Genrate Course"
+          onPress={() => onGenerateCourse()}
+          loading={loading}
+        />
+      )}
     </View>
   );
 }
@@ -181,14 +185,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 100,
     marginTop: 15,
+  
     textAlignVertical: "top",
     fontSize: 16,
     fontFamily: "outfit",
     backgroundColor: Colors.BG_GRAY,
   },
   topicsContainer: {
-    marginTop: 10,
-    padding: 10,
+    marginTop: 20,
+    padding: 15,
     backgroundColor: Colors.BG_GRAY,
     borderRadius: 10,
   },
