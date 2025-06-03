@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform } from "react-native";
 import React from "react";
 import Header from "../../components/Home/Header";
 import Colors from "../../constant/Colors";
-import NoCourse from "../../components/Home/NoCourse";
+import NoCourse from "../../components/Home/noCourse";
 
 
 
