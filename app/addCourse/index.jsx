@@ -73,7 +73,7 @@ export default function AddCourse() {
       visibilityTime: 5000,
       position: 'top',
     });
-    console.log("Generated Course: ", [courses]);
+    console.log("Generated Course: ", courses);
     // Saving the generated courses to Firestore database
       courses?.forEach(async (course) => {
         await setDoc(doc(db, 'Courses', Date.now().toString()), {
