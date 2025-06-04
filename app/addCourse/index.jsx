@@ -82,7 +82,7 @@ export default function AddCourse() {
 
       await setDoc(doc(db, "Courses", Date.now().toString()), {
         ...courses,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date(),
         createdBy: userDetail?.name,
         createdByEmail: userDetail?.email,
       });
@@ -113,7 +113,7 @@ export default function AddCourse() {
 
       <TextInput
         style={styles.input}
-        placeholder="Enter course topic"
+        placeholder="Enter Course Name"
         multiline={true}
         value={userInput}
         onChangeText={(value) => setUserInput(value)}
