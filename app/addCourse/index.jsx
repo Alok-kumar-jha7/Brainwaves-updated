@@ -122,7 +122,7 @@ export default function AddCourse() {
       <Button
         text="Generate Topics"
         onPress={() => onGenerateTopic()}
-        loading={loading}
+        loading={loadingTopics}
         type="outline"
       />
 
@@ -158,7 +158,7 @@ export default function AddCourse() {
         <Button
           text="Genrate Course"
           onPress={() => onGenerateCourse()}
-          loading={loading}
+          loading={loadingCourses}
         />
       )}
     </View>
