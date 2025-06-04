@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useContext } from "react";
 import Colors from "../../constant/Colors";
-import Button from "../../components/Shared/Button";
+import Button from "../../components/shared/Button";
 import { generateTopics, generateCourses } from "../../config/geminiAiConfig";
 import Prompt from "../../constant/Prompt";
 import Toast from "react-native-toast-message";

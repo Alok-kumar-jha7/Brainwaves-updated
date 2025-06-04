@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image} from "react-native";
 import React from "react";
-import Button from "../Shared/Button";
-import Toast from "react-native-toast-message";
+import Button from "../shared/Button";
+// import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 
 export default function NoCourse() {
