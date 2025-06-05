@@ -2,7 +2,7 @@ import { View, StyleSheet, Platform } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import Header from "../../components/Home/Header";
 import Colors from "../../constant/Colors";
-import NoCourse from "../../components/Home/noCourse";
+import NoCourse from "../../components/Home/NoCourse";
 import { collection, query, where,getDocs } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import {UserDetailContext } from "./../../context/UserDetailsContext";
@@ -17,12 +17,12 @@ export default function Home() {
   useEffect(() => { userDetail&&GetCourseList() }, [userDetail]);
   const GetCourseList = async () => { 
     setCourseList([])
-    const q = query(collection(db, "Courses"), where("createdBy", '==', userDetail?.name));
+    const q = query(collection(db, "Course"), where("createdBy", '==', userDetail?.name));
     const querySnapshot = await getDocs(q);
-   console.log("Number of docs found:", querySnapshot.size);
     querySnapshot.forEach((doc) => {
+      console.log("Number of docs found:", querySnapshot.size);
       console.log('document data:-', doc.data());
-       setCourseList((prev) => [...prev,doc.data()]);
+      setCourseList((prev) => [...prev,doc.data]);
       
     })
   }
@@ -30,6 +30,7 @@ export default function Home() {
     <View style={styles.container}>
       <Header />
       {courseList?.length == 0 ? < NoCourse /> : <CourseList courseList={courseList} />}
+      console.log("courseList", courseList),
     </View>
   );
 }

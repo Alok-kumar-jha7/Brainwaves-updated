@@ -9,14 +9,14 @@ export default function CourseList({ courseList }) {
       <FlatList
         data={courseList}
         renderItem={({ item, index }) => {
-          console.log("item", item);
+          console.log("item", item.courses.courseTitle);
           return (
             <View key={index} >
               <Image
                 style={styles.bannerImage}
-                source={imageAssets[item?.banner_image]}
+                source={imageAssets[item.course.banner_image]}
               />
-              <Text style={styles.courseTitle}>{item?.courseTitle}</Text>
+              <Text style={styles.courseTitle}>{item.course.courseTitle}</Text>
             </View>
           );
         }}
