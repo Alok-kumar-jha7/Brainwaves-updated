@@ -21,7 +21,7 @@ export default {
     - Generate 10 Quizz, 10 Flashcard and 10 Questions answer
     - Tag each course to one of the categorty from :["Tech & Coding","Business & Finance","Health & Fitness","Science & Engineering","Arts & Creativity"]
     - Output in JSON Format only 
-    -  "courses": [
+    - "Courses": [
   {
     "courseTitle": '<Intro to Python>',
     "description": '',
