@@ -20,7 +20,7 @@ const result = await model.generateContent(prompt);
 
     const response = await result.response;
     return {
-      text: response.text({ format: 'text' }),
+      text: response.text(),
     };
   } catch (error) {
     console.error('Error generating topics:', error);
@@ -45,7 +45,7 @@ const result = await model.generateContent(prompt);
 
     const response = await result.response;
     return {
-      text: response.text({ format: 'text' }),
+      text: response.text(),
     };
   } catch (error) {
     console.error('Error generating Courses:', error);

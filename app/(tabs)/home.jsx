@@ -14,22 +14,22 @@ export default function Home() {
   const [courseList, setCourseList] = useState([]);
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   
-  useEffect(() => { userDetail&&GetCourseList() }, [userDetail]);
+  useEffect(() => { userDetail&&GetCourseList }, [userDetail]);
   const GetCourseList = async () => { 
     setCourseList([])
-    const q = query(collection(db, "Course"), where("createdBy", '==', userDetail?.name));
+    const q = query(collection(db, "Courses"), where("createdBy", '==', userDetail?.name));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       console.log("Number of docs found:", querySnapshot.size);
       console.log('document data:-', doc.data());
-      setCourseList((prev) => [...prev,doc.data]);
+      setCourseList((prev) => [...prev,doc.data()]);
       
     })
   }
   return (
     <View style={styles.container}>
       <Header />
-      {courseList?.length == 0 ? < NoCourse /> : <CourseList courseList={courseList} />}
+      {courseList?.length == 0?< NoCourse /> : <CourseList courseList={courseList} />}
       console.log("courseList", courseList),
     </View>
   );

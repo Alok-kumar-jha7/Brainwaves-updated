@@ -9,6 +9,7 @@ import {
 import React, { useState, useContext } from "react";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Shared/Button";
+
 import { generateTopics, generateCourses } from "../../config/geminiAiConfig";
 import Prompt from "../../constant/Prompt";
 import Toast from "react-native-toast-message";
@@ -37,8 +38,8 @@ export default function AddCourse() {
     const PROMPT = `Learn ${userInput}+
             ${Prompt.IDEA}`;
     const aiResponse = await generateTopics(PROMPT);
-    const topicIdea = JSON.parse(aiResponse.text);
-    console.log("Parsed Topic Idea:", topicIdea);
+    const topicIdea =aiResponse.text;
+    console.log("Parsed Topic Ideaa:", topicIdea);
     setGeneratedTopics(topicIdea);
     setLoadingTopics(false);
   };
@@ -79,15 +80,16 @@ export default function AddCourse() {
       });
 
       console.log("Generated Course:", courses);
-
-      await setDoc(doc(db, "Courses", Date.now().toString()), {
-        ...courses,
-        createdAt: new Date(),
-        createdBy: userDetail?.name,
-        createdByEmail: userDetail?.email,
+      courses.forEach(async(course) => {
+        await setDoc(doc(db, "Courses", Date.now().toString()), {
+          ...course,
+          createdAt: new Date(),
+          createdBy: userDetail?.name,
+          createdByEmail: userDetail?.email,
+        });
       });
-
       router.push("/(tabs)/home");
+      
     } catch (error) {
       console.error("Error generating course:", error);
       Toast.show({
@@ -132,7 +134,7 @@ export default function AddCourse() {
         </Text>
         <ScrollView maxHeight={190}>
           <View style={styles.pressview}>
-            {generatedTopics.map((item, index) => (
+            {/* {generatedTopics.map((item, index) => (
               <Pressable key={index} onPress={() => onSelectTopic(item)}>
                 <Text
                   style={{
@@ -150,7 +152,7 @@ export default function AddCourse() {
                   {item}
                 </Text>
               </Pressable>
-            ))}
+            ))} */}
           </View>
         </ScrollView>
       </View>

@@ -1,23 +1,24 @@
-// Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAHzFB6Ugg_blJvkb4K-WOWkJONT31tqD8",
-  authDomain: "brainwaves-app.firebaseapp.com",
-  projectId: "brainwaves-app",
-  storageBucket: "brainwaves-app.firebasestorage.app",
-  messagingSenderId: "1070067047101",
-  appId: "1:1070067047101:web:b962bfee5ddff8475735d4",
-  measurementId: "G-EYEZ10WXYY"
+  apiKey: "AIzaSyBGjGzWM0e-ukqtFKw83VDtGua7L5EBfw0",
+  authDomain: "brainwaves-updated.firebaseapp.com",
+  projectId: "brainwaves-updated",
+  storageBucket: "brainwaves-updated.firebasestorage.app",
+  messagingSenderId: "902631665081",
+  appId: "1:902631665081:web:6dac949955e57ab205da68",
+  measurementId: "G-Q513J3PHTC"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

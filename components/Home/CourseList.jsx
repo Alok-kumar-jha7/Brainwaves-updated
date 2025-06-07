@@ -8,15 +8,16 @@ export default function CourseList({ courseList }) {
       <Text style={styles.courseLists}>Courses</Text>
       <FlatList
         data={courseList}
+        horizontal={true}
         renderItem={({ item, index }) => {
-          console.log("item", item.courses.courseTitle);
+          console.log("item", item.Courses[0].courseTitle);
           return (
             <View key={index} >
               <Image
                 style={styles.bannerImage}
-                source={imageAssets[item.course.banner_image]}
+                source={imageAssets[item.banner_image]}
               />
-              <Text style={styles.courseTitle}>{item.course.courseTitle}</Text>
+              <Text style={styles.courseTitle}>{item.courseTitle}</Text>
             </View>
           );
         }}

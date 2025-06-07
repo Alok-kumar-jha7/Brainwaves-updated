@@ -17,7 +17,7 @@ export default function Index() {
       const result = await getDoc(doc(db, "users", user?.email));
       Toast.show({
         type: "info",
-        text1: "You have already signed in 👋",
+        text1: "You have already signed in👋",
         text2: "Welcome back! 🎉",
         visibilityTime: 3000,
         position: "top",

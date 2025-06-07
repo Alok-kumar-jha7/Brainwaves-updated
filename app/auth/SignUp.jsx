@@ -63,20 +63,21 @@ export default function SignUp() {
           text1: "Error",
           text2: e.message,
           visibilityTime: 6000,
-           position: "top",
-
+          position: "top",
+          
         });
       });
-  };
-  const SaveUser = async (user) => {
-    const data = {
-      name: fullName,
-      email: email,
-      member: false,
-      uid: user?.uid,
     };
-    await setDoc(doc(db, "users", email), data);
-    setUserDetail(data);
+    const SaveUser = async (user) => {
+      const data = {
+        name: fullName,
+        email: email,
+        member: false,
+        uid: user?.uid,
+      };
+      await setDoc(doc(db, "users", email), data);
+      setUserDetail(data);
+      router.push("/(tabs)/home");
   };
 
   return (
@@ -119,7 +120,7 @@ export default function SignUp() {
       </View>
 
       <TouchableOpacity onPress={CreateNewAccount} style={styles.button}>
-        {!loading ? <Text style={styles.buttonText}>Sign Up</Text> :
+        {!loading ? <Text style={styles.buttonText}>Sign Up</Text>:
          <ActivityIndicator size={25} color='black' />}
       </TouchableOpacity>
 
