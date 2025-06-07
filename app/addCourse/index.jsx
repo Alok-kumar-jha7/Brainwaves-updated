@@ -37,8 +37,8 @@ export default function AddCourse() {
     });
     const PROMPT = `Learn ${userInput}+
             ${Prompt.IDEA}`;
-    const aiResponse = await generateTopics(PROMPT);
-    const topicIdea =aiResponse.text;
+    const aiResponse = await generateTopics.sendMessage(PROMPT);
+    const topicIdea =JSON.parse(aiResponse.text);
     console.log("Parsed Topic Ideaa:", topicIdea);
     setGeneratedTopics(topicIdea);
     setLoadingTopics(false);
@@ -134,7 +134,7 @@ export default function AddCourse() {
         </Text>
         <ScrollView maxHeight={190}>
           <View style={styles.pressview}>
-            {/* {generatedTopics.map((item, index) => (
+            {generatedTopics.map((item, index) => (
               <Pressable key={index} onPress={() => onSelectTopic(item)}>
                 <Text
                   style={{
@@ -152,7 +152,7 @@ export default function AddCourse() {
                   {item}
                 </Text>
               </Pressable>
-            ))} */}
+            ))}
           </View>
         </ScrollView>
       </View>

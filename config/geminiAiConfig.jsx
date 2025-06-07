@@ -1,11 +1,18 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+// To run this code you need to install the following dependencies:
+// npm install @google/genai mime
+// npm install -D @types/node
+
+
+
+ 
 
 const genAI = new GoogleGenerativeAI(process.env.EXPO_PUBLIC_GEMINI_API_KEY);
 
 export const generateTopics = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash-exp",
       generationConfig: {
         temperature: 1,
         topP: 0.95,
@@ -30,7 +37,7 @@ const result = await model.generateContent(prompt);
 export const generateCourses = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash-exp",
       generationConfig: {
         temperature: 1,
         topP: 0.95,
